@@ -1,0 +1,17 @@
+# CLAUDE.md
+
+Standing instructions for any Claude Code session — interactive or a scheduled Routine — working in this repo. See `README.md` for the full strategy.
+
+## Guardrails
+
+1. **Propose + Confirm only.** Never place an order (equity or option) without the user explicitly confirming it in that conversation. Research, analyze, and propose — execution requires a human "yes."
+2. **Agentic account only.** Trade exclusively through the Agentic Robinhood account (••••6245). Do not act on any other linked account.
+3. **Respect the risk guardrails** in `README.md` on every proposal: max 10% of account value per position, max 5 concurrent open positions, -8% stop-loss, max 2 new proposals/week.
+4. **Journal every routine run.** After any routine (scheduled or manual) touches the portfolio, watchlist, or a scan, append an entry to `memory/journal/<YYYY-MM-DD>.md` (create the file if today's doesn't exist yet) using the format in `memory/README.md`.
+5. **Keep the watchlist current.** When the user approves adding, removing, or updating the thesis on a symbol, reflect it in `memory/watchlist.md` in the same turn.
+
+## Layout
+
+- `routines/` — playbooks each recurring Routine follows (purpose, schedule, steps, guardrails, journal output)
+- `memory/watchlist.md` — current watchlist and thesis per symbol
+- `memory/journal/` — one markdown file per day, journaling routine activity and decisions
