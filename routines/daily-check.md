@@ -2,7 +2,7 @@
 
 **Purpose.** A same-day pulse on the account and the watchlist — did anything move enough to matter before tomorrow's session.
 
-**Schedule.** Weekdays, 4:30 PM ET (after market close). Linked Routine: "Daily Robinhood Portfolio Summary" (`trig_0159qNqU6AWs6kepqu4FSqBq`).
+**Schedule.** Weekdays, 4:30 PM ET (after market close). Linked Routine: "Daily Robinhood Portfolio Summary".
 
 **Steps.**
 1. `get_portfolio` and `get_equity_positions` on the Agentic account (••••6245) — total value, day's gain/loss, open positions.
