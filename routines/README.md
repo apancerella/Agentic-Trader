@@ -13,9 +13,13 @@ Each file in this folder is a **playbook**: a short spec for one recurring task.
 | Playbook | Purpose | Schedule |
 |---|---|---|
 | [`daily-check.md`](daily-check.md) | Portfolio + watchlist snapshot | Weekdays, 4:30 PM ET |
-| [`weekly-scan.md`](weekly-scan.md) | Screen for new swing candidates | Weekly |
-| [`earnings-watch.md`](earnings-watch.md) | Flag earnings risk on watchlist/holdings | Weekly |
+| [`weekly-scan.md`](weekly-scan.md) | Screen for new swing candidates | Weekly, Sunday 6:00 PM ET |
+| [`earnings-watch.md`](earnings-watch.md) | Flag earnings risk on watchlist/holdings | Weekly, Monday 7:00 AM ET |
 | [`opportunity-scan.md`](opportunity-scan.md) | Report assets with potential upside right now (watchlist + fresh scan) | Weekdays, 9:00 AM & 1:00 PM ET |
+
+All four are wired to Claude Code Routines now (see each playbook's Schedule line for the trigger ID). They're all self-bound to the same session (`session_01WAYdETVewPXXJGZ9qTaTAa`) rather than firing into a fresh session each time — this account's org doesn't support attaching connectors (e.g. Robinhood) to fresh-session triggers, so self-binding to a session that already has the connector was the only way to guarantee tool access on every firing. The tradeoff: no proactive push notification when a routine fires (self-bind/persistent-session triggers don't support the `notifications` option), and every firing resumes that one conversation rather than starting clean.
+
+Their cron expressions are all pinned to ET while EDT (UTC-4) is in effect — each playbook's Schedule line notes the UTC offset it'll need once EST (UTC-5) starts in November.
 
 Adding a new routine: write a playbook here first, then wire it to a Claude Code Routine (`create_trigger`) once the playbook is settled.
 

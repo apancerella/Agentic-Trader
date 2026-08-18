@@ -2,7 +2,7 @@
 
 **Purpose.** A same-day pulse on the account and the watchlist — did anything move enough to matter before tomorrow's session.
 
-**Schedule.** Weekdays, 4:30 PM ET (after market close). Linked Routine: "Daily Robinhood Portfolio Summary".
+**Schedule.** Weekdays, 4:30 PM ET (after market close). Linked Routine: "Daily Portfolio Check (4:30pm ET)" (`trig_01TMRyXAPbwmcq3Qj8SX1NKo`), self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa` (self-bind was required to retain Robinhood connector access — the org doesn't support attaching connectors to fresh-session triggers). Cron `30 20 * * 1-5` (UTC) — correct for 4:30 PM ET while EDT is in effect; needs updating to `30 21 * * 1-5` when clocks fall back to EST in November.
 
 **Steps.**
 1. `get_portfolio` and `get_equity_positions` on the Agentic account (••••6245) — total value, day's gain/loss, open positions.
