@@ -2,7 +2,7 @@
 
 **Purpose.** Make sure an earnings print never blindsides an open or proposed swing position — earnings volatility is a distinct risk from the technical/fundamental thesis.
 
-**Schedule.** Weekly (proposed: Monday 7:00 AM ET, ahead of the trading week — confirm cadence before creating the Routine).
+**Schedule.** Weekly, Monday 7:00 AM ET, ahead of the trading week. Linked Routine: "Earnings Watch (Mon 7am ET)" (`trig_01SrpYvGfDVPjg3grQccUuk3`), self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa`. Cron `0 11 * * 1` (UTC) — correct for 7 AM ET while EDT is in effect; needs updating to `0 12 * * 1` when clocks fall back to EST in November.
 
 **Steps.**
 1. Build the symbol set: current holdings (`get_equity_positions`) plus everything in `memory/watchlist.md`.

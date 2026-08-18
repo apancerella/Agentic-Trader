@@ -2,7 +2,7 @@
 
 **Purpose.** A more frequent, lighter-weight pass than `weekly-scan.md`: surface assets — from the current watchlist and from a fresh scan — that look like they have real upside potential right now, and report it directly to the user. This routine never modifies the watchlist or proposes a trade itself; it's purely a heads-up so the user can decide whether to act (via `/watchlist-add` or the `propose-trade` skill) themselves.
 
-**Schedule.** Weekdays, 9:00 AM ET and 1:00 PM ET. Linked Routine: "Opportunity Scan (9am & 1pm ET)".
+**Schedule.** Weekdays, 9:00 AM ET and 1:00 PM ET. Linked Routine: "Opportunity Scan (9am & 1pm ET)" (`trig_01XUD48NBPSqJB98FuKbnPnu`), self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa` (self-bind was required to retain Robinhood connector access — the org doesn't support attaching connectors to fresh-session triggers). Cron `0 13,17 * * 1-5` (UTC) — correct for 9 AM/1 PM ET while EDT is in effect; needs updating to `0 14,18 * * 1-5` when clocks fall back to EST in November.
 
 **Steps.**
 1. Build the candidate set:

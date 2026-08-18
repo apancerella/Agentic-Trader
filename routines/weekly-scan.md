@@ -2,7 +2,7 @@
 
 **Purpose.** Surface new swing-trade candidates that fit the strategy, so the watchlist doesn't go stale.
 
-**Schedule.** Weekly (proposed: Sunday evening or Monday premarket ET — confirm cadence before creating the Routine).
+**Schedule.** Weekly, Sunday 6:00 PM ET (ahead of Monday's earnings-watch pass and the trading week). Linked Routine: "Weekly Scan (Sun 6pm ET)" (`trig_013fd83SVdupRpgnAjPwAPCr`), self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa`. Cron `0 22 * * 0` (UTC) — correct for 6 PM ET while EDT is in effect; needs updating to `0 23 * * 0` when clocks fall back to EST in November.
 
 **Steps.**
 1. `get_scans` to see existing saved scans; `run_scan` on one that fits swing-trade criteria (liquid, trending/breakout, reasonable volume), or `create_scan` if none exists yet.
