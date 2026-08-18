@@ -37,3 +37,7 @@ Always finish with the `journal-entry` skill:
 - **Proposals:** candidates proposed for the watchlist, with one-line thesis each.
 - **User decisions:** which were approved, rejected, or changed.
 - **Follow-ups:** anything worth a closer look next time (e.g., a candidate that was close but not quite there).
+
+## Commit, push, and merge
+
+Commit the journal entry (and any approved watchlist additions — already covered by guardrail 6), push, and merge to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this for this Routine's output, since it never places a trade. This doesn't change step 4/5 above: still get the user's confirmation before writing anything to `memory/watchlist.md` in the first place — the auto-merge is about not needing a *second* approval to land the change once it's made, not a license to add symbols unconfirmed.

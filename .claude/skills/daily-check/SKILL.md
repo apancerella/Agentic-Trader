@@ -33,3 +33,7 @@ Always finish by using the `journal-entry` skill to log this run. Include:
 - **Findings:** portfolio value, day P&L, open positions, open orders, watchlist symbols that moved and why it matters.
 - **Follow-ups:** anything flagged for later (approaching stop, thesis shift, etc.) — omit if genuinely nothing stood out.
 - No Proposals or User decisions sections — this routine doesn't produce either.
+
+## Commit, push, and merge
+
+Commit the journal entry, push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade. If a follow-up here leads to an actual trade proposal later, that's a separate step through `propose-trade`, gated the normal way.

@@ -35,3 +35,7 @@ Always finish with the `journal-entry` skill:
 - **Findings:** what was checked (watchlist + scan used) and what stood out, with the specific signal for each — or that nothing new stood out.
 - **Follow-ups:** anything worth a closer look next run, if relevant.
 - No Proposals or User decisions sections — this routine doesn't produce either.
+
+## Commit, push, and merge
+
+Commit the journal entry (and, if applicable, a new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade. This covers the journal/report side only — it does not extend to actually acting on anything the scan found (that's still `/watchlist-add` or `propose-trade`, each gated the normal way).
