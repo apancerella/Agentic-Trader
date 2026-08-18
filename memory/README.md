@@ -6,6 +6,8 @@ Persistent state for the trading practice, read and written by routines and by a
 
 Current watchlist: symbol, thesis, when it was added, and status (watching / proposed / position). Updated only when the user confirms a change (see `CLAUDE.md`).
 
+**Mirrored to Robinhood.** This file's symbol list should always match the Robinhood custom watchlist named **"Agentic Watchlist"** (list_id `aaf2fa51-2240-4463-8af2-d8c8b0621302`) under the Agentic account — that's the source of truth on the Robinhood side (what shows up in the app), while this file carries the extra context (thesis, added date, status) Robinhood's watchlist doesn't. Any add/remove here must be mirrored there via `add_to_watchlist`/`remove_from_watchlist` in the same turn, per `CLAUDE.md`.
+
 ## `journal/`
 
 One markdown file per day: `journal/YYYY-MM-DD.md`. Every routine run (or manual trading activity in this repo) appends an entry — create the day's file if it doesn't exist yet, never overwrite a prior entry.

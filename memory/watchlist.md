@@ -1,6 +1,7 @@
 # Watchlist
 
+_Mirrored to the Robinhood "Agentic Watchlist" (list_id `aaf2fa51-2240-4463-8af2-d8c8b0621302`) under the Agentic account — see `memory/README.md`._
+
 | Symbol | Thesis | Added | Status |
 |---|---|---|---|
-
-_Empty — the Agentic account is currently unfunded ($100 cash, no positions). Candidates will be added here once proposed by `routines/weekly-scan.md` and confirmed by the user._
+| TSLA | _(no thesis yet)_ | 2026-08-18 | watching |
