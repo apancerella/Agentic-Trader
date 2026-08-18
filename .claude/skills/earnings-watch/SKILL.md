@@ -30,3 +30,7 @@ Always finish with the `journal-entry` skill:
 - **Findings:** symbols with upcoming earnings, whether each is a holding or a watchlist candidate, and the specific risk flagged for each.
 - **Follow-ups:** anything that needs a decision before its earnings date (e.g., "consider trimming before print" or "hold off proposing entry until after earnings").
 - No Proposals or User decisions sections — this routine doesn't produce either.
+
+## Commit, push, and merge
+
+Commit the journal entry, push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade.
