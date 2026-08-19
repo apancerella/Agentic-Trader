@@ -55,3 +55,7 @@ Use the `journal-entry` skill in both cases:
 
 - **When a proposal is drafted** (regardless of outcome): Summary, Findings (signal that supports it), Proposals (the full sized proposal), User decisions (approved/rejected/changed — leave this out only if the user hasn't responded yet and will in a later turn), Follow-ups if relevant.
 - **When a cap blocks a proposal** (steps 3–4): still journal it — Summary + Findings (what was considered) + Follow-ups (revisit once the cap resets), so the block is visible in the record even though nothing was proposed.
+
+## Commit and push — but don't auto-merge
+
+Commit the journal entry and push it, same as any other change in this repo. Unlike the four read-only Routines or a watchlist-only edit, `CLAUDE.md` guardrails 6 and 7 do **not** cover this skill's output — a drafted or executed trade proposal is exactly the kind of change that still needs the user's explicit go-ahead before it lands on `main`, whether or not the order itself has been confirmed yet. Open a PR if the repo's workflow calls for one, then wait for the user to say to merge it.
