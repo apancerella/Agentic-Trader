@@ -14,8 +14,12 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
 1. **Build the candidate set.**
    - Every symbol on `memory/watchlist.md`.
    - A fresh scan: `get_scans` for a bullish/momentum-oriented screen, `run_scan` on it (or `create_scan` if none exists — same liquidity bar as `weekly-scan`).
+   - **Filter out junk before doing any real work on it.** The scanner has no native "exclude leveraged/basket product" filter, but every leveraged ETF/ETN, inverse product, and basket/trust observed in scan output comes back with an empty `market_cap` field (`""`), while every real operating company has one populated. Drop any hit with an empty `market_cap` from the candidate set — don't spend a technicals/fundamentals call vetting a 2x/3x wrapper riding sector beta. Note the count skipped this way in the journal, don't just silently drop them.
+   - **Bring forward catalyst context.** Read the most recent `weekly-scan` journal entry for any catalyst-calendar findings (FDA decisions, index rebalances, M&A chatter, conferences) — if a scan hit or watchlist mover lines up with a catalyst already flagged there, say so; it's a stronger signal than a bare price move with no known reason behind it.
 
-2. **Check for a real signal.** For each candidate: `get_equity_technical_indicators`, `get_equity_historicals`, and (for anything not already vetted) `get_equity_fundamentals`. You're looking for something that justifies flagging it *right now* — a breakout, momentum shift, or a level from an existing thesis being approached — not just "still exists and still looks fine."
+2. **Check for a real signal.** For each surviving candidate: `get_equity_technical_indicators`, `get_equity_historicals`, and (for anything not already vetted) `get_equity_fundamentals`. You're looking for something that justifies flagging it *right now* — a breakout, momentum shift, or a level from an existing thesis being approached — not just "still exists and still looks fine."
+   - **Trend context.** Pull SMA 50/200 from `get_equity_technical_indicators` — is the move happening with the trend (price above both, 50 above 200) or against it (a bounce inside a downtrend is a much weaker signal than a breakout in an established uptrend)?
+   - **Support/resistance.** Pull the `pivot_points` indicator for candidates that clear the first screen — a move approaching a pivot resistance level is a different, weaker setup than one that's already cleared it with room to the next level; note the nearest level either way.
 
 3. **Filter hard before reporting.** This runs three times a day. Reporting the same unchanged symbols every run trains the user to stop reading it — only surface what's actually new or changed since the signal would have last been true. It's fine, and often correct, for a run to report nothing.
 
@@ -43,7 +47,7 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
 
 Always finish with the `journal-entry` skill:
 - **Summary:** "Opportunity scan, <morning/midday/afternoon>."
-- **Findings:** what was checked (watchlist + scan used) and what stood out, with the specific signal for each — or that nothing new stood out.
+- **Findings:** what was checked (watchlist + scan used) and what stood out, with the specific signal for each (including trend/SMA context and nearest pivot level where checked) — or that nothing new stood out. Note how many scan hits were skipped as junk (empty market_cap).
 - **Proposals:** any watchlist add/remove made this run (with reasoning), and the trade proposal if one was drafted (with the earnings-watch/weekly-scan cross-check noted) — omit if neither happened.
 - **User decisions:** the user's response to a trade proposal, if resolved in the same turn — omit if there was no proposal, or if it's still awaiting a reply.
 - **Follow-ups:** anything worth a closer look next run, if relevant.

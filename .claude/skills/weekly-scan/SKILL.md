@@ -12,16 +12,21 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
 ## Steps
 
 1. **Find or build a scan.** `get_scans` to see what exists. Run one that fits the strategy (liquid, trending/breakout, reasonable volume) with `run_scan`, or `create_scan` if nothing suitable exists yet.
+   - **Junk filter.** Drop any hit with an empty `market_cap` field before doing any further work on it — that's the mechanical signature of leveraged/inverse ETFs, ETNs, and basket/trust products (the scanner has no native filter for this; every real operating company has a populated market cap, every leveraged/basket product observed so far doesn't). Note the count skipped.
 
-2. **Sanity-check each hit.** For every candidate the scan returns: `get_equity_fundamentals` and (`get_equity_technical_indicators`, `get_equity_historicals`) to confirm the setup actually looks like a swing-trade candidate, not just a scanner artifact.
+2. **Proactive catalyst research — independent of the scan.** The reactive momentum scan only ever surfaces names that have *already* moved. Before or alongside it, look forward: check for upcoming catalysts on the current watchlist symbols and the broader market/sector — FDA decision dates, index rebalance windows, M&A chatter, major industry conferences, macro data releases relevant to the watchlist's sectors. Use `get_earnings_calendar` plus `search`/`get_equity_fundamentals` for anything watchlist-adjacent, and note any dated catalyst worth watching even if nothing has moved yet — this is what `opportunity-scan` reads back later to connect a future price move to a known reason.
 
-3. **Cross-check.**
+3. **Sector/theme relative-strength check.** Pull `get_equity_historicals` (or quotes) for a fixed basket of major sector ETFs — XLK (tech), XLF (financials), XLE (energy), XLV (health care), XLY (consumer discretionary), XLP (consumer staples), XLI (industrials), XLB (materials), XLU (utilities), XLRE (real estate), XLC (communication services) — over the last 1-week and 1-month windows, rank them by relative performance, and journal the ranking. The point is to catch a sector rotation proactively (e.g. money rotating into energy/materials, out of tech) rather than only noticing it after several watchlist names in the same sector have already moved.
+
+4. **Sanity-check each surviving scan hit.** For every candidate the scan returns (post junk-filter): `get_equity_fundamentals` and (`get_equity_technical_indicators`, `get_equity_historicals`) to confirm the setup actually looks like a swing-trade candidate, not just a scanner artifact. Include trend context (SMA 50/200 — is this with or against the prevailing trend) and the nearest support/resistance level from the `pivot_points` indicator.
+
+5. **Cross-check.**
    - Against `memory/watchlist.md` — skip anything already on it.
    - Against current open positions (`get_equity_positions`) — respect the max-5-concurrent-positions guardrail from `CLAUDE.md` when thinking about whether a candidate is realistic to ever act on soon.
 
-4. **Propose, don't add.** For each surviving candidate, present a one-line thesis (why it fits: setup, catalyst, level). Present this to the user and ask for confirmation on which (if any) to add.
+6. **Propose, don't add.** For each surviving candidate, present a one-line thesis (why it fits: setup, catalyst, level, trend). Present this to the user and ask for confirmation on which (if any) to add.
 
-5. **Update the watchlist only after confirmation.** Once the user approves a symbol, add a row to `memory/watchlist.md` (`| Symbol | Thesis | Added | Status |`, status `watching`) in the same turn — per `CLAUDE.md`, the watchlist only changes on explicit user approval.
+7. **Update the watchlist only after confirmation.** Once the user approves a symbol, add a row to `memory/watchlist.md` (`| Symbol | Thesis | Added | Price at Add | Status |`, pulling the current price via `get_equity_quotes`, status `watching`) in the same turn — per `CLAUDE.md`, the watchlist only changes on explicit user approval.
 
 ## Guardrails
 
@@ -33,7 +38,7 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
 
 Always finish with the `journal-entry` skill:
 - **Summary:** scan run + criteria used.
-- **Findings:** candidates found, with the fundamentals/technicals that made each pass or fail the sanity check.
+- **Findings:** candidates found, with the fundamentals/technicals (including trend/SMA and nearest pivot level) that made each pass or fail the sanity check; how many hits were skipped as junk; upcoming catalysts found for watchlist/sector symbols even if nothing was actionable yet; the sector relative-strength ranking.
 - **Proposals:** candidates proposed for the watchlist, with one-line thesis each.
 - **User decisions:** which were approved, rejected, or changed.
 - **Follow-ups:** anything worth a closer look next time (e.g., a candidate that was close but not quite there).

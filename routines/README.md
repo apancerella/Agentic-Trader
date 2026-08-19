@@ -12,10 +12,10 @@ Each file in this folder is a **playbook**: a short spec for one recurring task.
 
 | Playbook | Purpose | Schedule |
 |---|---|---|
-| [`daily-check.md`](daily-check.md) | Portfolio + watchlist snapshot | Weekdays, 4:30 PM ET |
-| [`weekly-scan.md`](weekly-scan.md) | Screen for new swing candidates | Weekly, Sunday 6:00 PM ET |
+| [`daily-check.md`](daily-check.md) | Portfolio + watchlist snapshot, including performance-since-added on each watchlist pick | Weekdays, 4:30 PM ET |
+| [`weekly-scan.md`](weekly-scan.md) | Screen for new swing candidates (junk-filtered), proactive catalyst-calendar research, and sector relative-strength ranking | Weekly, Sunday 6:00 PM ET |
 | [`earnings-watch.md`](earnings-watch.md) | Flag earnings risk on watchlist/holdings | Weekly, Monday 7:00 AM ET |
-| [`opportunity-scan.md`](opportunity-scan.md) | Surface upside (watchlist + fresh scan) — and act on it: self-manages the watchlist, may surface a trade proposal | Weekdays, 10:00 AM, 12:00 PM & 3:30 PM ET |
+| [`opportunity-scan.md`](opportunity-scan.md) | Surface upside (watchlist + junk-filtered fresh scan, with trend/pivot context and catalyst tie-ins) — and act on it: self-manages the watchlist, may surface a trade proposal | Weekdays, 10:00 AM, 12:00 PM & 3:30 PM ET |
 
 All four are wired to Claude Code Routines now (see each playbook's Schedule line for the trigger ID; `opportunity-scan` has two, since a single cron expression can't mix the on-the-hour and half-past-the-hour firing times).
 
