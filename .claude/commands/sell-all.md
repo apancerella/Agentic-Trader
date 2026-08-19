@@ -35,6 +35,8 @@ Arguments: none needed. `$ARGUMENTS` is ignored — this always means "every ope
 
 9. **If rejected, partially confirmed, or changed:** only act on what was actually confirmed (e.g. the user may want to keep one position) — don't round up to "sell everything" from a partial yes.
 
+10. **Refresh the dashboard — only once orders have actually been placed.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so it reflects the closed positions. A proposal that's still awaiting confirmation hasn't changed anything yet — skip the refresh until step 8 executes.
+
 ## Guardrails
 
 - Agentic account (••••6245) only.

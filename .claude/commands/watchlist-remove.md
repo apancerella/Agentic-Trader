@@ -22,4 +22,6 @@ Arguments: `$ARGUMENTS` — a single ticker symbol, e.g. `/watchlist-remove TSLA
 
 7. **Commit, push, and merge to `main` in the same turn.** Commit the `memory/watchlist.md` and journal changes, push, and merge to `main` (open a PR first if the repo's workflow requires one) without waiting for the user to separately say "merge it." `CLAUDE.md` guardrail 6 pre-authorizes auto-merging watchlist-only changes specifically, so the repo file and the Robinhood list never sit out of sync waiting on a merge. This authorization is scoped to changes that only touch the watchlist (plus its journal entry) — don't extend it to anything else you happen to be touching in the same session.
 
+8. **Refresh the dashboard.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so the removed symbol drops off it. Read-only step — do this regardless of whether step 7's merge has landed yet, since the dashboard reads local files, not GitHub.
+
 This command only ever touches the watchlist (`memory/watchlist.md` and its mirrored Robinhood list) — it never places an order, closes a position, or modifies a trade. Removing a symbol from the watchlist has no bearing on an existing position in that symbol, if one exists — that's a separate decision through `propose-trade`.

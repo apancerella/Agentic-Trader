@@ -38,6 +38,8 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
 
 10. **On confirmation (separate step, same conversation):** place the order (`place_equity_order` or `place_option_order`, using `review_equity_order`/`review_option_order` first if available to double check terms), then move to journaling.
 
+11. **Refresh the dashboard — only once an order has actually been placed.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so the new position (or updated/closed one) shows up. Drafting or presenting a proposal doesn't change account state, so skip this until step 10 actually executes — refreshing after a proposal that's still awaiting a yes/no would show nothing different anyway.
+
 ## Guardrails (from `CLAUDE.md` / `README.md`)
 
 - Max 10% of account value per position

@@ -24,4 +24,6 @@ Arguments: `$ARGUMENTS` — expected as `<SYMBOL> [one-line thesis]`, e.g. `/wat
 
 8. **Commit, push, and merge to `main` in the same turn.** Commit the `memory/watchlist.md` and journal changes, push, and get them merged into `main` (open a PR and merge it if the repo's workflow requires one) without waiting for the user to separately say "merge it." `CLAUDE.md` guardrail 6 pre-authorizes auto-merging watchlist-only changes specifically, because leaving them stuck on a branch means the repo file and the Robinhood list can drift apart. This authorization is scoped to changes that only touch the watchlist (plus its journal entry) — don't use it as license to auto-merge anything else you happen to be touching in the same session.
 
+9. **Refresh the dashboard.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so it reflects the new symbol. Read-only step — do this regardless of whether step 8's merge has landed yet, since the dashboard reads local files, not GitHub.
+
 This command only ever touches the watchlist (`memory/watchlist.md` and its mirrored Robinhood list) — it never places an order or proposes a trade. Adding a symbol here is not a trade proposal; an actual entry still goes through the `propose-trade` skill later.
