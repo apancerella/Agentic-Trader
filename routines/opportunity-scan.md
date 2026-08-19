@@ -2,11 +2,11 @@
 
 **Purpose.** A more frequent, lighter-weight pass than `weekly-scan.md`: surface assets — from the current watchlist and from a fresh scan — that look like they have real upside potential right now. Unlike the other routines, this one is allowed to act on what it finds: it can add or remove watchlist symbols on its own conviction, and — after cross-checking `earnings-watch` and `weekly-scan` findings — it can surface an actual trade proposal via `propose-trade`. It never places an order itself; that always still requires the user's explicit confirmation.
 
-**Schedule.** Weekdays, 9:00 AM ET, 12:00 PM ET, and 3:30 PM ET. Two linked Routines (cron can't express three times with different minutes in one expression):
-- "Opportunity Scan (9am & 12pm ET)" (`trig_01XUD48NBPSqJB98FuKbnPnu`), cron `0 13,16 * * 1-5` (UTC).
+**Schedule.** Weekdays, 10:00 AM ET, 12:00 PM ET, and 3:30 PM ET — all within regular market hours (9:30 AM–4:00 PM ET); the original 9:00 AM slot was moved to 10:00 AM because it fired before the open, when the momentum scan has no session data to work with. Two linked Routines (cron can't express three times with different minutes in one expression):
+- "Opportunity Scan (10am & 12pm ET)" (`trig_01XUD48NBPSqJB98FuKbnPnu`), cron `0 14,16 * * 1-5` (UTC).
 - "Opportunity Scan (3:30pm ET)" (`trig_014hGv4bvP9tmAdYaTmz6Kyx`), cron `30 19 * * 1-5` (UTC).
 
-Both self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa` (self-bind was required to retain Robinhood connector access — the org doesn't support attaching connectors to fresh-session triggers). The UTC hours are correct for 9 AM/12 PM/3:30 PM ET while EDT is in effect; they'll need updating to `0 14,17 * * 1-5` and `30 20 * * 1-5` respectively when clocks fall back to EST in November.
+Both self-bound to the session at `session_01WAYdETVewPXXJGZ9qTaTAa` (self-bind was required to retain Robinhood connector access — the org doesn't support attaching connectors to fresh-session triggers). The UTC hours are correct for 10 AM/12 PM/3:30 PM ET while EDT is in effect; they'll need updating to `0 15,17 * * 1-5` and `30 20 * * 1-5` respectively when clocks fall back to EST in November.
 
 **Steps.**
 1. Build the candidate set:
