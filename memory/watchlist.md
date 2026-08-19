@@ -4,7 +4,6 @@ _Mirrored to the Robinhood "Agentic Watchlist" (list_id `aaf2fa51-2240-4463-8af2
 
 | Symbol | Thesis | Added | Status |
 |---|---|---|---|
-| TSLA | Down ~40% from its Dec 2025 high ($498.83) to a Jul 29 low ($297.38), now rebounding (~$337, RSI 47, neutral). Bull case is robotaxi/Optimus/AI-chip-manufacturing optionality, backed by $25B+ 2026 capex and a new $30B debt facility — that leverage is a real risk to watch, not just upside. Analyst consensus still Buy (~$400+ avg target), but some forecasts see it sideways-to-lower into year-end. Next catalyst: Q3 earnings ~Oct 28, 2026. | 2026-08-18 | watching |
 | TRGP | Record Q2 EBITDA (+38% YoY), raised FY26 guidance to top of range, dividend hiked 25%, multiple analyst price-target raises (Morgan Stanley $343, Jefferies $345); hit a new 52-week high today. Midstream/NGL infrastructure — insulated from the AI-chip sector selloff. | 2026-08-18 | watching |
 | TRI | Beat Q2 estimates (9% revenue growth), raised FY26 revenue guidance to ~8%, AI-driven momentum in the Legal/Tax/Corporates "Big 3" (+10% organic). Still ~43% below its Sep 2025 high and recovering off a June low — better risk/reward than the other names found the same day. | 2026-08-18 | watching |
 | DT | Beat Q2 earnings (Aug 13), multiple analyst price-target raises (Citi $62→$65), 18.8% revenue growth, Strong Buy consensus (~26% upside to average target). Observability/APM platform riding cloud & AI-ops spend. | 2026-08-18 | watching |
