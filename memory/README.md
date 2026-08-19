@@ -29,3 +29,7 @@ One markdown file per day: `journal/YYYY-MM-DD.md`. Every routine run (or manual
 ```
 
 Omit a section if it doesn't apply (e.g. a read-only daily check has no Proposals).
+
+## Dashboard
+
+A read-only visual snapshot of this repo's state — account value, positions, watchlist with theses, and a timeline of today's journal activity — is published as a Claude Artifact called **"Agentic Trading Desk"**: <https://claude.ai/code/artifact/af750ef9-4a47-4189-ada6-8551c0c5097d>. It's rebuilt on request via the `trading-dashboard` skill (`.claude/skills/trading-dashboard/`), which redeploys to this same URL rather than creating a new one each time. It never writes anything back to the repo or Robinhood — purely a rendering of `memory/journal/` and `memory/watchlist.md`.
