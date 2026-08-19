@@ -13,3 +13,5 @@
 **Guardrails.** Never places a trade. Respect the max-2-new-proposals/week guardrail when the *next* step (an actual trade proposal) is made from a watchlist entry.
 
 **Journal output.** Append to `memory/journal/<date>.md`: scan used + criteria, candidates found, proposed watchlist additions and thesis, user's decisions on each.
+
+**Dashboard output.** After journaling (and merging any watchlist changes), rebuild and republish the "Agentic Trading Desk" Artifact (see `.claude/skills/trading-dashboard/`) so it reflects this run.

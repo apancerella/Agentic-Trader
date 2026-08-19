@@ -13,3 +13,5 @@
 **Guardrails.** Read-only — this routine never places or modifies an order. Position-sizing/stop-loss rules apply only when a separate proposal is made elsewhere.
 
 **Journal output.** Append to `memory/journal/<date>.md`: portfolio snapshot (value, day P&L), open orders, watchlist symbols that moved and why it matters, follow-ups.
+
+**Dashboard output.** After journaling, rebuild and republish the "Agentic Trading Desk" Artifact (see `.claude/skills/trading-dashboard/`) so it reflects this run.

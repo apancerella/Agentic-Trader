@@ -41,3 +41,7 @@ Always finish with the `journal-entry` skill:
 ## Commit, push, and merge
 
 Commit the journal entry (and any approved watchlist additions — already covered by guardrail 6), push, and merge to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this for this Routine's output, since it never places a trade. This doesn't change step 4/5 above: still get the user's confirmation before writing anything to `memory/watchlist.md` in the first place — the auto-merge is about not needing a *second* approval to land the change once it's made, not a license to add symbols unconfirmed.
+
+## Refresh the dashboard
+
+After journaling (and merging any watchlist changes), rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL already linked in `memory/README.md` rather than creating a duplicate. This is read-only — it doesn't touch the repo or Robinhood, so nothing above gates it. If the `trading-dashboard` skill or the Artifact tool isn't available, say so rather than silently skipping it.
