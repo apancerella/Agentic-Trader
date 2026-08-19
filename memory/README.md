@@ -4,7 +4,9 @@ Persistent state for the trading practice, read and written by routines and by a
 
 ## `watchlist.md`
 
-Current watchlist: symbol, thesis, when it was added, and status (watching / proposed / position). Updated only when the user confirms a change (see `CLAUDE.md`).
+Current watchlist: symbol, thesis, when it was added, the price at the time it was added ("Price at Add"), and status (watching / proposed / position). Updated only when the user confirms a change (see `CLAUDE.md`).
+
+**Price at Add** is captured once, at add time (`/watchlist-add` and `weekly-scan` both pull it via `get_equity_quotes` before writing the row), and never changes afterward — it's the fixed baseline `daily-check` and the dashboard use to compute performance-since-added for each pick, a feedback loop on whether the watchlist's calls are actually working out over time.
 
 **Mirrored to Robinhood.** This file's symbol list should always match the Robinhood custom watchlist named **"Agentic Watchlist"** (list_id `aaf2fa51-2240-4463-8af2-d8c8b0621302`) under the Agentic account — that's the source of truth on the Robinhood side (what shows up in the app), while this file carries the extra context (thesis, added date, status) Robinhood's watchlist doesn't. Any add/remove here must be mirrored there via `add_to_watchlist`/`remove_from_watchlist` in the same turn, per `CLAUDE.md`.
 
@@ -32,4 +34,4 @@ Omit a section if it doesn't apply (e.g. a read-only daily check has no Proposal
 
 ## Dashboard
 
-A read-only visual snapshot of this repo's state — account value, positions, watchlist with theses, and a timeline of today's journal activity — is published as a Claude Artifact called **"Agentic Trading Desk"**: <https://claude.ai/code/artifact/af750ef9-4a47-4189-ada6-8551c0c5097d>. It's rebuilt on request via the `trading-dashboard` skill (`.claude/skills/trading-dashboard/`), which redeploys to this same URL rather than creating a new one each time. It never writes anything back to the repo or Robinhood — purely a rendering of `memory/journal/` and `memory/watchlist.md`.
+A read-only visual snapshot of this repo's state — account value, positions, watchlist with theses and performance-since-added, and a timeline of today's journal activity — is published as a Claude Artifact called **"Agentic Trading Desk"**: <https://claude.ai/code/artifact/af750ef9-4a47-4189-ada6-8551c0c5097d>. It's rebuilt on request via the `trading-dashboard` skill (`.claude/skills/trading-dashboard/`), which redeploys to this same URL rather than creating a new one each time. It never writes anything back to the repo or Robinhood — purely a rendering of `memory/journal/` and `memory/watchlist.md`.

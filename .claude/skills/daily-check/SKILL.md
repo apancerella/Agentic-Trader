@@ -18,6 +18,7 @@ Full spec: `routines/daily-check.md`. This skill operationalizes it — if the t
 3. **Watchlist scan.** Read `memory/watchlist.md`. For each symbol listed:
    - `get_equity_quotes` for current price.
    - If the move looks notable (beyond typical daily noise, or near a level the thesis cares about), also pull `get_equity_technical_indicators` for more context.
+   - **Performance since added.** Compute % change from the row's "Price at Add" to the current price. This is a feedback loop on the picks themselves, not a trade signal — just note it plainly (e.g. "TRGP +3.1% since 2026-08-18"). Don't act on it here; it's context for whether the watchlist's picks are actually working over time.
 
 4. **Flag, don't act.** For anything that stands out — approaching a stop-loss level, thesis looking invalidated, thesis playing out and worth acting on — note it as a follow-up. **Do not propose or place a trade as part of this skill.** If a follow-up looks like it warrants an actual trade proposal, say so explicitly and point to the `propose-trade` skill as the next step (in a later turn, once the user wants to act on it).
 
@@ -30,7 +31,7 @@ Full spec: `routines/daily-check.md`. This skill operationalizes it — if the t
 
 Always finish by using the `journal-entry` skill to log this run. Include:
 - **Summary:** one-line — daily check, date.
-- **Findings:** portfolio value, day P&L, open positions, open orders, watchlist symbols that moved and why it matters.
+- **Findings:** portfolio value, day P&L, open positions, open orders, watchlist symbols that moved and why it matters, and each symbol's % performance since added.
 - **Follow-ups:** anything flagged for later (approaching stop, thesis shift, etc.) — omit if genuinely nothing stood out.
 - No Proposals or User decisions sections — this routine doesn't produce either.
 
