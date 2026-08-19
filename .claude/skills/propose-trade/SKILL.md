@@ -27,18 +27,24 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
 
 7. **Pull supporting signal.** Whatever's relevant and not already in hand: `get_equity_technical_indicators`, `get_equity_fundamentals`, `get_earnings_calendar` (don't propose an entry into an earnings print without flagging it — cross-check against what `earnings-watch` would find).
 
-8. **Draft the proposal** with:
+8. **Check for chase/extension risk.** This matters most for candidates that come from `opportunity-scan`, since its momentum scan only ever surfaces names already up on the day — but check it for every entry proposal, whatever the source. Look at the day's move (entry price vs. prior close) and RSI:
+   - If the day's move is already large (roughly +7% or more) or RSI is at/approaching overbought (≥65), this is a real risk, not just color commentary: a stock can keep going, but a same-day spike this size commonly gives back several percent on ordinary profit-taking in the following days — with an -8% stop, that's a realistic chance of getting stopped out on noise before the underlying thesis (which may be completely intact) has time to play out.
+   - Don't let this silently block a proposal — genuine breakouts are sometimes worth entering right away. But **surface it explicitly** in the proposal (step 9) rather than leaving the user to notice the extension themselves, and give an honest read on whether entering now vs. waiting for consolidation looks better here.
+   - This check is about entries only. It doesn't apply to a trim/exit on an existing position — taking profit into strength is a different decision.
+
+9. **Draft the proposal** with:
    - Symbol, direction (buy/sell, new/add/trim/exit), one or two lines of rationale.
    - Entry price or condition.
    - Size — in shares/contracts, dollars, and % of account value.
    - Stop-loss level.
+   - **Chase/extension read** (from step 8, for entries): the day's move and RSI, and a plain statement of whether this looks like a reasonable entry now or one worth waiting on.
    - Where this lands against the guardrails: e.g. "this would be position 3 of 5" and "this is proposal 2 of 2 allowed this week."
 
-9. **Present it and stop.** Ask the user to confirm, reject, or adjust. Do not call any order-placing tool in this same step.
+10. **Present it and stop.** Ask the user to confirm, reject, or adjust. Do not call any order-placing tool in this same step.
 
-10. **On confirmation (separate step, same conversation):** place the order (`place_equity_order` or `place_option_order`, using `review_equity_order`/`review_option_order` first if available to double check terms), then move to journaling.
+11. **On confirmation (separate step, same conversation):** place the order (`place_equity_order` or `place_option_order`, using `review_equity_order`/`review_option_order` first if available to double check terms), then move to journaling.
 
-11. **Refresh the dashboard — only once an order has actually been placed.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so the new position (or updated/closed one) shows up. Drafting or presenting a proposal doesn't change account state, so skip this until step 10 actually executes — refreshing after a proposal that's still awaiting a yes/no would show nothing different anyway.
+12. **Refresh the dashboard — only once an order has actually been placed.** Rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL linked in `memory/README.md`, so the new position (or updated/closed one) shows up. Drafting or presenting a proposal doesn't change account state, so skip this until step 11 actually executes — refreshing after a proposal that's still awaiting a yes/no would show nothing different anyway.
 
 ## Guardrails (from `CLAUDE.md` / `README.md`)
 
