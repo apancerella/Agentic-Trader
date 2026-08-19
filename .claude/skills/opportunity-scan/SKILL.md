@@ -39,3 +39,7 @@ Always finish with the `journal-entry` skill:
 ## Commit, push, and merge
 
 Commit the journal entry (and, if applicable, a new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade. This covers the journal/report side only — it does not extend to actually acting on anything the scan found (that's still `/watchlist-add` or `propose-trade`, each gated the normal way).
+
+## Refresh the dashboard
+
+After journaling, rebuild and republish the "Agentic Trading Desk" Artifact via the `trading-dashboard` skill, redeploying to the URL already linked in `memory/README.md` rather than creating a duplicate. This is read-only — it doesn't touch the repo or Robinhood, so nothing above gates it. If the `trading-dashboard` skill or the Artifact tool isn't available, say so rather than silently skipping it.

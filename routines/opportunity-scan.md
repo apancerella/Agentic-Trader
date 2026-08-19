@@ -16,3 +16,5 @@
 **Guardrails.** Strictly read-only — never calls `place_equity_order`/`place_option_order`, never edits `memory/watchlist.md` or the Robinhood "Agentic Watchlist" itself. At twice a day this would blow through the max-2-new-proposals/week and watchlist-change guardrails if it acted on its own, so it only ever reports; the user (or a follow-up `/watchlist-add` / `propose-trade`) does the acting.
 
 **Journal output.** Append to `memory/journal/<date>.md`: which scan/watchlist symbols were checked, what stood out and why (or that nothing new stood out). No Proposals or User decisions sections — this routine doesn't produce either.
+
+**Dashboard output.** After journaling, rebuild and republish the "Agentic Trading Desk" Artifact (see `.claude/skills/trading-dashboard/`) so it reflects this run.

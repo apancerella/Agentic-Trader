@@ -14,3 +14,5 @@
 **Guardrails.** Read-only — never places, modifies, or proposes a trade itself. It only flags risk for a human (or another routine's proposal) to account for.
 
 **Journal output.** Append to `memory/journal/<date>.md`: symbols with upcoming earnings, whether each is a holding or watchlist candidate, and the flagged risk.
+
+**Dashboard output.** After journaling, rebuild and republish the "Agentic Trading Desk" Artifact (see `.claude/skills/trading-dashboard/`) so it reflects this run.
