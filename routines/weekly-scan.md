@@ -14,7 +14,7 @@
    - This is a "watch closer" signal, not a proposal trigger — journal it even when nothing else about the name is actionable yet, so `opportunity-scan` can read it back later and recognize a subsequent breakout as something already on watch rather than something out of nowhere.
 4. **Sector relative-strength check:** pull performance over the last week and month for a fixed sector-ETF basket (XLK, XLF, XLE, XLV, XLY, XLP, XLI, XLB, XLU, XLRE, XLC), rank them, and journal the ranking to catch rotations proactively.
 5. For each surviving scan hit, pull fundamentals (`get_equity_fundamentals`) and technicals (`get_equity_technical_indicators`, `get_equity_historicals`, including SMA 50/200 trend context and the nearest `pivot_points` level) to sanity-check the setup.
-6. Cross-check against `memory/watchlist.md` to avoid duplicates and against open positions to respect the max-5-concurrent-positions guardrail.
+6. Cross-check against `memory/watchlist.md` to avoid duplicates and against open positions to respect the max-7-concurrent-positions guardrail.
 7. Propose watchlist additions with a one-line thesis each — this routine proposes watchlist changes, not trades. Adding to the watchlist still requires user confirmation before `memory/watchlist.md` is updated (per `CLAUDE.md`); on approval, capture the current price via `get_equity_quotes` for the new "Price at Add" column.
 
 **Guardrails.** Never places a trade. Respect the max-2-new-proposals/week guardrail when the *next* step (an actual trade proposal) is made from a watchlist entry. The momentum-building alert never adds to the watchlist or proposes a trade on its own — it's a journaled observation only.

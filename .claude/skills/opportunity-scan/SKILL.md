@@ -42,7 +42,7 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
 - Never calls `place_equity_order`/`place_option_order` itself. `propose-trade` still requires the user's explicit confirmation before any order executes, per `CLAUDE.md` guardrail 1 — surfacing a proposal is not that confirmation.
 - Watchlist adds/removes are self-authorized (`CLAUDE.md` guardrail 8) but must be journaled with reasoning and mirrored to the Robinhood "Agentic Watchlist" — same mechanics as `watchlist-add`/`watchlist-remove`.
 - Never propose a trade without first checking `earnings-watch` and `weekly-scan` findings for that symbol (step 5).
-- `propose-trade`'s own guardrails (10% max position size, 5 max concurrent positions, -8% stop-loss, 2 max new proposals/week) apply once invoked — this skill doesn't re-implement them, just triggers the check.
+- `propose-trade`'s own guardrails (20% max position size, 7 max concurrent positions, no fixed cash reserve, -8% stop-loss, 2 max new proposals/week) apply once invoked — this skill doesn't re-implement them, just triggers the check.
 
 ## Journal
 

@@ -28,7 +28,7 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
 
 7. **Cross-check.**
    - Against `memory/watchlist.md` — skip anything already on it.
-   - Against current open positions (`get_equity_positions`) — respect the max-5-concurrent-positions guardrail from `CLAUDE.md` when thinking about whether a candidate is realistic to ever act on soon.
+   - Against current open positions (`get_equity_positions`) — respect the max-7-concurrent-positions guardrail from `CLAUDE.md` when thinking about whether a candidate is realistic to ever act on soon.
 
 8. **Propose, don't add.** For each surviving candidate, present a one-line thesis (why it fits: setup, catalyst, level, trend). Present this to the user and ask for confirmation on which (if any) to add.
 
