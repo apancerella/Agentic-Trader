@@ -19,9 +19,9 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
 
 3. **Check the weekly proposal cap first — before doing the rest of the work.** Look at `memory/journal/` entries from the last 7 days for `**Proposals:**` sections that contain an actual trade proposal (not "None", and not a watchlist-only proposal from `weekly-scan`). If 2 new trade proposals have already been made this week, stop here: tell the user the weekly cap (max 2 new proposals/week, from `CLAUDE.md`) has been reached, and don't draft a new one. (You can still discuss the idea qualitatively — just don't produce a formal sized proposal.)
 
-4. **Check the concurrent-position cap.** If this proposal is a new position (not an add/trim/exit on an existing one) and current open positions are already at 5, stop and say so — same treatment as step 3.
+4. **Check the concurrent-position cap.** If this proposal is a new position (not an add/trim/exit on an existing one) and current open positions are already at 7, stop and say so — same treatment as step 3.
 
-5. **Size the position.** Max size = 10% of total account value (from `get_portfolio`). Pull the current price (`get_equity_quotes` or `get_option_quotes`) and compute the share/contract count that fits inside that budget. Round down to a whole share/contract — don't propose fractional sizing that exceeds the cap.
+5. **Size the position.** Max size = 20% of total account value (from `get_portfolio`), at your judgment — this is a ceiling, not a target; size smaller when the setup, conviction, or existing exposure calls for it. There's no minimum cash reserve requirement, so full deployment (up to the position-size and position-count caps) is allowed when it's warranted. Pull the current price (`get_equity_quotes` or `get_option_quotes`) and compute the share/contract count that fits inside the chosen budget. Round down to a whole share/contract — don't propose fractional sizing that exceeds the cap.
 
 6. **Set the stop.** Stop-loss = entry price × 0.92 (-8%), per `CLAUDE.md`. For options, note that a fixed percentage stop on premium behaves differently than on the underlying — call this out explicitly rather than silently applying the same math, and ask the user how they want to define risk if it's not obvious.
 
@@ -38,7 +38,7 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
    - Size — in shares/contracts, dollars, and % of account value.
    - Stop-loss level.
    - **Chase/extension read** (from step 8, for entries): the day's move and RSI, and a plain statement of whether this looks like a reasonable entry now or one worth waiting on.
-   - Where this lands against the guardrails: e.g. "this would be position 3 of 5" and "this is proposal 2 of 2 allowed this week."
+   - Where this lands against the guardrails: e.g. "this would be position 3 of 7" and "this is proposal 2 of 2 allowed this week."
 
 10. **Present it and stop.** Ask the user to confirm, reject, or adjust. Do not call any order-placing tool in this same step.
 
@@ -48,8 +48,9 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
 
 ## Guardrails (from `CLAUDE.md` / `README.md`)
 
-- Max 10% of account value per position
-- Max 5 concurrent open positions
+- Max 20% of account value per position (a ceiling — size at your own judgment, not automatically to the max)
+- Max 7 concurrent open positions
+- No minimum cash reserve — full deployment up to the caps above is allowed
 - Stop-loss at -8% from entry
 - Max 2 new trade proposals per week
 - Agentic account (••••6245) only

@@ -16,9 +16,10 @@ An agentic swing-trading practice built on Claude Code Routines and the Robinhoo
 | Scans / screeners | `get_scans`, `run_scan`, `create_scan` |
 | Watchlist | curated in [`memory/watchlist.md`](memory/watchlist.md) |
 
-**Risk guardrails** (conservative defaults — every proposal must respect these):
-- Max **10%** of account value per position
-- Max **5** concurrent open positions
+**Risk guardrails** (every proposal must respect these):
+- Max **20%** of account value per position — a ceiling, not a target; `propose-trade` sizes at its own judgment within it
+- Max **7** concurrent open positions
+- No fixed minimum cash reserve — up to full deployment is allowed within the caps above
 - Stop-loss at **-8%** from entry
 - No more than **2** new trade proposals per week
 
