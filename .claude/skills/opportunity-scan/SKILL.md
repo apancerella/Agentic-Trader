@@ -1,15 +1,17 @@
 ---
 name: opportunity-scan
-description: Runs the three-times-daily opportunity scan for the Agentic-Trader repo — checks the current watchlist plus a fresh screen for assets showing real, current upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the 10am/12pm/3:30pm ET "Opportunity Scan" Routines fire. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may surface a trade proposal via propose-trade (after cross-checking earnings-watch and weekly-scan findings) — it never places an order itself; that always requires the user's explicit confirmation. This is the operationalized version of routines/opportunity-scan.md.
+description: Runs the opportunity scan for the Agentic-Trader repo (every 2 hours, 9:30am-3:30pm ET on weekdays) — checks the current watchlist plus a fresh screen for assets showing real, current upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the "Opportunity Scan" Routine fires. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may surface a trade proposal via propose-trade (after cross-checking earnings-watch and weekly-scan findings) — it never places an order itself; that always requires the user's explicit confirmation. This is the operationalized version of routines/opportunity-scan.md.
 ---
 
 # Opportunity Scan
 
-A lighter, more frequent pass than `weekly-scan` — three times a day, meant to catch something worth acting on before the next `daily-check` or `weekly-scan` would. Unlike the other routines in this repo, it's allowed to act: it can self-manage the watchlist and can initiate a trade proposal, though it never has to.
+A lighter, more frequent pass than `weekly-scan` — every 2 hours during market hours (9:30am, 11:30am, 1:30pm, 3:30pm ET, weekdays), meant to catch something worth acting on before the next `daily-check` or `weekly-scan` would. Unlike the other routines in this repo, it's allowed to act: it can self-manage the watchlist and can initiate a trade proposal, though it never has to.
 
 Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disagree, treat the playbook as the source of truth and flag it.
 
 ## Steps
+
+0. **Confirm the market is actually open.** The Routine's cron only restricts firing to weekdays — it has no concept of US market holidays, and no holiday-calendar tool exists to check in advance. Pull `get_equity_quotes` for one or two watchlist symbols and check `state` and trade-timestamp freshness before doing anything else. If the market isn't actually open (closed today, most likely a holiday), stop here, skip the rest of the steps, and journal a one-line "market closed today, skipping" note instead of running the full scan against dead data.
 
 1. **Build the candidate set.**
    - Every symbol on `memory/watchlist.md`.
@@ -22,7 +24,7 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
    - **Trend context.** Pull SMA 50/200 from `get_equity_technical_indicators` — is the move happening with the trend (price above both, 50 above 200) or against it (a bounce inside a downtrend is a much weaker signal than a breakout in an established uptrend)?
    - **Support/resistance.** Pull the `pivot_points` indicator for candidates that clear the first screen — a move approaching a pivot resistance level is a different, weaker setup than one that's already cleared it with room to the next level; note the nearest level either way.
 
-3. **Filter hard before reporting.** This runs three times a day. Reporting the same unchanged symbols every run trains the user to stop reading it — only surface what's actually new or changed since the signal would have last been true. It's fine, and often correct, for a run to report nothing.
+3. **Filter hard before reporting.** This runs every 2 hours during market hours. Reporting the same unchanged symbols every run trains the user to stop reading it — only surface what's actually new or changed since the signal would have last been true. It's fine, and often correct, for a run to report nothing.
 
 4. **Manage the watchlist directly.** This is the one routine in this repo authorized to do this without a confirmation round-trip (`CLAUDE.md` guardrail 8):
    - **Add** a new candidate that clears the repo's usual conviction bar — real, current signal; no bad news or major concerns (the same bar applied in every watchlist research pass so far) — by invoking the `watchlist-add` skill.
@@ -52,6 +54,7 @@ Always finish with the `journal-entry` skill:
 - **Proposals:** any watchlist add/remove made this run (with reasoning), and the trade proposal if one was drafted (with the earnings-watch/weekly-scan cross-check noted) — omit if neither happened.
 - **User decisions:** the user's response to a trade proposal, if resolved in the same turn — omit if there was no proposal, or if it's still awaiting a reply.
 - **Follow-ups:** anything worth a closer look next run, if relevant.
+- If step 0 found the market closed, a one-line entry noting that is enough — skip the rest of the template.
 
 ## Commit, push, and merge
 
