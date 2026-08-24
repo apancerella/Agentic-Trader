@@ -17,7 +17,7 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
    - `get_portfolio` — total account value (needed for position sizing).
    - `get_equity_positions` (and `get_option_positions` if relevant) — current open position count and existing exposure, including whether this symbol is already held.
 
-3. **Check the weekly proposal cap first — before doing the rest of the work.** Look at `memory/journal/` entries from the last 7 days for `**Proposals:**` sections that contain an actual trade proposal (not "None", and not a watchlist-only proposal from `weekly-scan`). If 2 new trade proposals have already been made this week, stop here: tell the user the weekly cap (max 2 new proposals/week, from `CLAUDE.md`) has been reached, and don't draft a new one. (You can still discuss the idea qualitatively — just don't produce a formal sized proposal.)
+3. **Check the weekly proposal cap first — before doing the rest of the work.** Look at `memory/journal/` entries from the last 7 days for `**Proposals:**` sections that contain an actual trade proposal (not "None", and not a watchlist-only proposal from `weekly-scan`). If 7 new trade proposals have already been made this week, stop here: tell the user the weekly cap (max 7 new proposals/week, from `CLAUDE.md`) has been reached, and don't draft a new one. (You can still discuss the idea qualitatively — just don't produce a formal sized proposal.)
 
 4. **Check the concurrent-position cap.** If this proposal is a new position (not an add/trim/exit on an existing one) and current open positions are already at 7, stop and say so — same treatment as step 3.
 
@@ -52,7 +52,7 @@ This is the choke point between "here's an idea" and "here's a proposal a human 
 - Max 7 concurrent open positions
 - No minimum cash reserve — full deployment up to the caps above is allowed
 - Stop-loss at -8% from entry
-- Max 2 new trade proposals per week
+- Max 7 new trade proposals per week
 - Agentic account (••••6245) only
 - Propose + Confirm: never place an order without the user's explicit "yes" in that conversation
 
