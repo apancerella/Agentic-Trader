@@ -1,6 +1,6 @@
 ---
 name: weekly-scan
-description: Runs the weekly screen for new swing-trade candidates in the Agentic-Trader repo — scans for liquid, trending/breakout setups, sanity-checks hits against fundamentals and technicals, cross-checks against the existing watchlist and open positions, and proposes watchlist additions (never trades) for the user to confirm. Use this when the user asks to "scan for new candidates," "find new swing trades," "what's new to watch," or wants to refresh the watchlist, or when a weekly scan Routine fires. This is the operationalized version of routines/weekly-scan.md.
+description: Runs the weekly screen for new swing-trade candidates in the Agentic-Trader repo — scans for liquid, trending/breakout setups plus two leading-indicator screens (unusual options activity, stealth volume accumulation), sanity-checks hits against fundamentals and technicals, cross-checks against the existing watchlist and open positions, and proposes watchlist additions (never trades) for the user to confirm. Use this when the user asks to "scan for new candidates," "find new swing trades," "what's new to watch," or wants to refresh the watchlist, or when a weekly scan Routine fires. This is the operationalized version of routines/weekly-scan.md.
 ---
 
 # Weekly Scan for New Candidates
@@ -22,9 +22,14 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
    - Cross-check `get_earnings_calendar` for each flagged name — a rising-RSI trend running into a print within the next 7 days is a different, riskier read (anticipation risk) than one with a clear runway; call it out explicitly rather than folding it into the same flag.
    - This step never adds to the watchlist or triggers a proposal on its own — it's a "watch closer" observation. Journal it even when nothing else about the name is actionable, so `opportunity-scan` (step 1's catalyst-context read already covers this file) can recognize a later breakout as something already on watch rather than something out of nowhere.
 
-5. **Sector/theme relative-strength check.** Pull `get_equity_historicals` (or quotes) for a fixed basket of major sector ETFs — XLK (tech), XLF (financials), XLE (energy), XLV (health care), XLY (consumer discretionary), XLP (consumer staples), XLI (industrials), XLB (materials), XLU (utilities), XLRE (real estate), XLC (communication services) — over the last 1-week and 1-month windows, rank them by relative performance, and journal the ranking. The point is to catch a sector rotation proactively (e.g. money rotating into energy/materials, out of tech) rather than only noticing it after several watchlist names in the same sector have already moved.
+4. **Leading-signal scans — positioning ahead of a move.** Steps 1 and 3 are both reactive at their core (they fire once price has already moved, even if step 3 catches it earlier than step 1). This step looks for two different kinds of leading indicator, neither of which requires price to have moved yet:
+   - **"Predictive Scan — Unusual Options Activity"** (`get_scans` by title, `run_scan`) — relative options volume > 4x normal on a $1B+ name that hasn't yet made a big move (%change < 3%). Pull `Total call volume` / `Total put volume` from the results and read the skew — a lopsided call/put ratio on real volume is informed positioning ahead of an anticipated move, worth noting even before anything else confirms it.
+   - **"Predictive Scan — Stealth Accumulation"** (`get_scans` by title, `run_scan`) — relative (stock) volume > 1.5x normal while price is still flat (-1% to +2% on the day) — buying pressure showing up in volume before it's shown up in price.
+   - Same junk filter as step 1. Fold survivors into the candidate set for steps 6-7 below, carrying a **"leading, unconfirmed"** label — this skill does the full fundamentals/technicals workup on them same as any other candidate (step 6), so a leading signal reaching the proposal stage (step 8) has already been vetted, not just flagged mechanically.
 
-6. **Sanity-check each surviving scan hit.** For every candidate the scan returns (post junk-filter): `get_equity_fundamentals` and (`get_equity_technical_indicators`, `get_equity_historicals`) to confirm the setup actually looks like a swing-trade candidate, not just a scanner artifact. Include trend context (SMA 50/200 — is this with or against the prevailing trend) and the nearest support/resistance level from the `pivot_points` indicator.
+5. **Sector/theme relative-strength check.** Pull `get_equity_historicals` (or quotes) for a fixed basket of major sector ETFs — XLK (tech), XLF (financials), XLE (energy), XLV (health care), XLY (consumer discretionary), XLP (consumer staples), XLI (industrials), XLB (materials), XLU (utilities), XLRE (real estate), XLC (communication services) — over the last 1-week and 1-month windows, rank them by relative performance, and journal the ranking. The point is to catch a sector rotation proactively (e.g. money rotating into energy/materials, out of tech) rather than only noticing it after several watchlist names in the same sector have already moved. Cross-check any step-4 leading-signal survivor against this ranking — a leading signal in a sector that's already ranked at or near the top of this list is a materially stronger combined read than the same signal in a lagging sector; call that out explicitly when it lines up.
+
+6. **Sanity-check each surviving scan hit.** For every candidate the scans return (post junk-filter, reactive and leading alike): `get_equity_fundamentals` and (`get_equity_technical_indicators`, `get_equity_historicals`) to confirm the setup actually looks like a swing-trade candidate, not just a scanner artifact. Include trend context (SMA 50/200 — is this with or against the prevailing trend) and the nearest support/resistance level from the `pivot_points` indicator.
 
 7. **Cross-check.**
    - Against `memory/watchlist.md` — skip anything already on it.
@@ -37,14 +42,14 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
 ## Guardrails
 
 - Never calls `place_equity_order` / `place_option_order` — this skill proposes watchlist entries, not trades.
-- Max 2 new **trade** proposals/week applies later, when a watchlist symbol becomes an actual trade proposal via `propose-trade` — not to watchlist additions themselves.
+- Max 7 new **trade** proposals/week applies later, when a watchlist symbol becomes an actual trade proposal via `propose-trade` — not to watchlist additions themselves.
 - Don't add a symbol already on the watchlist or duplicate an open position's thesis without noting it's already held.
 
 ## Journal
 
 Always finish with the `journal-entry` skill:
 - **Summary:** scan run + criteria used.
-- **Findings:** candidates found, with the fundamentals/technicals (including trend/SMA and nearest pivot level) that made each pass or fail the sanity check; how many hits were skipped as junk; upcoming catalysts found for watchlist/sector symbols even if nothing was actionable yet; names flagged as building momentum (RSI trend, cumulative move, earnings-proximity read); the sector relative-strength ranking.
+- **Findings:** candidates found — reactive and leading — with the fundamentals/technicals (including trend/SMA and nearest pivot level) that made each pass or fail the sanity check; how many hits were skipped as junk across all scans; upcoming catalysts found for watchlist/sector symbols even if nothing was actionable yet; names flagged as building momentum (RSI trend, cumulative move, earnings-proximity read); any leading-signal survivor (options skew or relative-volume read, and whether it lines up with a top-ranked sector); the sector relative-strength ranking.
 - **Proposals:** candidates proposed for the watchlist, with one-line thesis each.
 - **User decisions:** which were approved, rejected, or changed.
 - **Follow-ups:** anything worth a closer look next time (e.g., a candidate that was close but not quite there).

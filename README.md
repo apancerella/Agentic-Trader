@@ -13,7 +13,8 @@ An agentic swing-trading practice built on Claude Code Routines and the Robinhoo
 |---|---|
 | Technical indicators | `get_equity_technical_indicators`, `get_equity_historicals` |
 | Fundamentals & earnings | `get_equity_fundamentals`, `get_earnings_calendar`, `get_earnings_results` |
-| Scans / screeners | `get_scans`, `run_scan`, `create_scan` |
+| Reactive scans / screeners (price has already moved) | `get_scans`, `run_scan`, `create_scan` — "Opportunity Scan — Momentum Breakout" and "Weekly Scan — Early Momentum" |
+| Leading-indicator scans (positioning ahead of a move, price hasn't confirmed yet) | Same tools — "Predictive Scan — Unusual Options Activity" (relative options volume > 4x normal, call/put skew, on a name that hasn't moved yet) and "Predictive Scan — Stealth Accumulation" (relative stock volume > 1.5x normal while price is still flat). Run by `opportunity-scan` and `weekly-scan`; a survivor is a watch-only flag until something else corroborates it — see those playbooks. |
 | Watchlist | curated in [`memory/watchlist.md`](memory/watchlist.md) |
 
 **Risk guardrails** (every proposal must respect these):
@@ -21,7 +22,7 @@ An agentic swing-trading practice built on Claude Code Routines and the Robinhoo
 - Max **7** concurrent open positions
 - No fixed minimum cash reserve — up to full deployment is allowed within the caps above
 - Stop-loss at **-8%** from entry
-- No more than **2** new trade proposals per week
+- No more than **7** new trade proposals per week
 
 **Process flow.**
 ```

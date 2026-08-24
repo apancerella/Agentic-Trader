@@ -41,7 +41,7 @@ Arguments: none needed. `$ARGUMENTS` is ignored — this always means "every ope
 
 - Agentic account (••••6245) only.
 - Never place or cancel an order without explicit confirmation in this conversation, no matter how the command was invoked.
-- This is an exit action, not a new trade idea — it doesn't count against the max-2-new-proposals/week cap (that guardrail governs new positions, not liquidating existing ones), and the max-20%-per-position / max-7-positions / -8%-stop guardrails don't apply to a sell (they size and cap *entries*). State this plainly if asked, so it's clear this isn't being used to dodge those caps.
+- This is an exit action, not a new trade idea — it doesn't count against the max-7-new-proposals/week cap (that guardrail governs new positions, not liquidating existing ones), and the max-20%-per-position / max-7-positions / -8%-stop guardrails don't apply to a sell (they size and cap *entries*). State this plainly if asked, so it's clear this isn't being used to dodge those caps.
 
 ## Journal
 
