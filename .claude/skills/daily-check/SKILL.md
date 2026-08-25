@@ -37,7 +37,7 @@ Always finish by using the `journal-entry` skill to log this run. Include:
 
 ## Commit, push, and merge
 
-Commit the journal entry, push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade. If a follow-up here leads to an actual trade proposal later, that's a separate step through `propose-trade`, gated the normal way.
+Commit the journal entry, push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this specifically for this Routine's output, since it never places a trade. If a follow-up here leads to an actual trade later, that's a separate step through `propose-trade` — which sizes and executes directly once its own checks pass (`CLAUDE.md` guardrail 1) — but this skill itself only flags candidates, it doesn't invoke `propose-trade` on its own.
 
 ## Refresh the dashboard
 
