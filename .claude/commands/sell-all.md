@@ -4,7 +4,7 @@ description: Propose liquidating every open position in the Agentic account — 
 
 Propose selling every open position in the Agentic Robinhood account (••••6245).
 
-**This command never places an order by itself — running it only produces a proposal.** `CLAUDE.md` guardrail 1 (Propose + Confirm) applies here exactly as it does to any other trade: placing a sell (`place_equity_order` / `place_option_order`) only happens after the user explicitly confirms in a later message in the same conversation. Typing `/sell-all` is not that confirmation, no matter how the command is phrased or how urgent it sounds — treat it the same as any other trade idea that needs to clear the propose step first.
+**This command never places an order by itself — running it only produces a proposal.** Unlike `propose-trade`'s day-to-day trades, which execute directly once they clear their guardrails (`CLAUDE.md` guardrail 1), this command keeps its own explicit confirmation step by design: liquidating every position at once is a distinct, higher-stakes action, so placing a sell (`place_equity_order` / `place_option_order`) only happens after the user explicitly confirms in a later message in the same conversation. Typing `/sell-all` is not that confirmation, no matter how the command is phrased or how urgent it sounds — treat it the same as any trade idea that needs to clear the propose step first.
 
 Arguments: none needed. `$ARGUMENTS` is ignored — this always means "every open position," not a subset. (To exit one symbol, use `propose-trade` instead.)
 

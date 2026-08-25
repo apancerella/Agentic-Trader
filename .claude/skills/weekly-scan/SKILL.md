@@ -42,7 +42,7 @@ Full spec: `routines/weekly-scan.md`. If this skill and that doc ever disagree, 
 ## Guardrails
 
 - Never calls `place_equity_order` / `place_option_order` — this skill proposes watchlist entries, not trades.
-- Max 7 new **trade** proposals/week applies later, when a watchlist symbol becomes an actual trade proposal via `propose-trade` — not to watchlist additions themselves.
+- Max 7 new **trades**/week applies later, when a watchlist symbol becomes an actual trade via `propose-trade` (which sizes and executes directly, no separate confirmation step) — not to watchlist additions themselves.
 - Don't add a symbol already on the watchlist or duplicate an open position's thesis without noting it's already held.
 
 ## Journal

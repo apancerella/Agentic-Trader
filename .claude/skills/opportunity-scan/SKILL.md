@@ -1,6 +1,6 @@
 ---
 name: opportunity-scan
-description: Runs the opportunity scan for the Agentic-Trader repo (every 2 hours, 9:30am-3:30pm ET on weekdays) — checks the current watchlist plus a reactive breakout screen and two leading-indicator screens (unusual options activity, stealth volume accumulation) for assets showing real, current or emerging upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the "Opportunity Scan" Routine fires. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may surface a trade proposal via propose-trade (after cross-checking earnings-watch and weekly-scan findings) — it never places an order itself; that always requires the user's explicit confirmation. This is the operationalized version of routines/opportunity-scan.md.
+description: Runs the opportunity scan for the Agentic-Trader repo (every 2 hours, 9:30am-3:30pm ET on weekdays) — checks the current watchlist plus a reactive breakout screen and two leading-indicator screens (unusual options activity, stealth volume accumulation) for assets showing real, current or emerging upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the "Opportunity Scan" Routine fires. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may trigger propose-trade (after cross-checking earnings-watch and weekly-scan findings), which sizes and places the order directly — no separate user confirmation, per CLAUDE.md guardrail 1. This is the operationalized version of routines/opportunity-scan.md.
 ---
 
 # Opportunity Scan
@@ -39,31 +39,30 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
 6. **Consider a trade proposal — optional.** For anything, new or already on the watchlist, that looks compelling enough to actually trade:
    - **Cross-check earnings timing first.** Read the most recent `earnings-watch` journal entry; if it's stale (older than about a week) or never covered this symbol, run `get_earnings_calendar` for it directly. Never let a proposal walk into an earnings print unflagged.
    - **Cross-check deeper vetting.** Read the most recent `weekly-scan` journal entry for prior fundamentals/technicals work on this symbol; if none exists, pull `get_equity_fundamentals` directly — the same sanity-check `weekly-scan` itself would do.
-   - Only once both checks come back clean, invoke the `propose-trade` skill for that symbol. It runs its own guardrail checks (sizing, position cap, weekly proposal cap) and presents to the user — it still never places an order without their explicit confirmation.
-   - This step is genuinely optional. A run with nothing that clears both cross-checks should say so plainly rather than stretch a marginal setup into a proposal. A bare step-2 leading signal (no corroboration) shouldn't reach this step at all — it isn't a trade candidate on its own.
+   - Only once both checks come back clean, invoke the `propose-trade` skill for that symbol. It runs its own guardrail checks (sizing, position cap, weekly trade cap) and, once they pass, places the order directly — no separate confirmation step.
+   - This step is genuinely optional. A run with nothing that clears both cross-checks should say so plainly rather than stretch a marginal setup into a trade. A bare step-2 leading signal (no corroboration) shouldn't reach this step at all — it isn't a trade candidate on its own.
 
-7. **Report directly to the user** — symbol, the specific signal (reactive or leading — say which), current price/level, one line on why it matters now, plus anything added to or removed from the watchlist this run, plus whether a trade proposal is attached (and why, if not).
+7. **Report directly to the user** — symbol, the specific signal (reactive or leading — say which), current price/level, one line on why it matters now, plus anything added to or removed from the watchlist this run, plus whether a trade was executed (and why, if not).
 
 ## Guardrails
 
-- Never calls `place_equity_order`/`place_option_order` itself. `propose-trade` still requires the user's explicit confirmation before any order executes, per `CLAUDE.md` guardrail 1 — surfacing a proposal is not that confirmation.
+- Never calls `place_equity_order`/`place_option_order` directly itself — trade execution flows only through `propose-trade`, which places the order once its own guardrail checks pass. No separate confirmation step, per `CLAUDE.md` guardrail 1.
 - Watchlist adds/removes are self-authorized (`CLAUDE.md` guardrail 8) but must be journaled with reasoning and mirrored to the Robinhood "Agentic Watchlist" — same mechanics as `watchlist-add`/`watchlist-remove`.
-- Never propose a trade without first checking `earnings-watch` and `weekly-scan` findings for that symbol (step 6).
-- `propose-trade`'s own guardrails (20% max position size, 7 max concurrent positions, no fixed cash reserve, -8% stop-loss, 7 max new proposals/week) apply once invoked — this skill doesn't re-implement them, just triggers the check.
+- Never trigger a trade without first checking `earnings-watch` and `weekly-scan` findings for that symbol (step 6).
+- `propose-trade`'s own guardrails (20% max position size, 7 max concurrent positions, no fixed cash reserve, -8% stop-loss, 7 max new trades/week) apply once invoked — this skill doesn't re-implement them, just triggers the check.
 
 ## Journal
 
 Always finish with the `journal-entry` skill:
 - **Summary:** "Opportunity scan, <morning/midday/afternoon>."
 - **Findings:** what was checked (watchlist + reactive scan + the two leading-signal scans) and what stood out, with the specific signal for each (including trend/SMA context and nearest pivot level where checked, and — for a leading signal — the options call/put skew or relative-volume read that triggered it) — or that nothing new stood out. Note how many hits were skipped as junk (empty market_cap) across all three scans, and label any leading-signal finding as such so it's not confused with a confirmed move.
-- **Proposals:** any watchlist add/remove made this run (with reasoning), and the trade proposal if one was drafted (with the earnings-watch/weekly-scan cross-check noted) — omit if neither happened.
-- **User decisions:** the user's response to a trade proposal, if resolved in the same turn — omit if there was no proposal, or if it's still awaiting a reply.
+- **Proposals:** any watchlist add/remove made this run (with reasoning), and the trade if one was executed via `propose-trade` (with the earnings-watch/weekly-scan cross-check noted, and the fill) — omit if neither happened.
 - **Follow-ups:** anything worth a closer look next run, if relevant.
 - If step 0 found the market closed, a one-line entry noting that is enough — skip the rest of the template.
 
 ## Commit, push, and merge
 
-Commit the journal entry (and any watchlist add/remove, and any new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrails 6 and 7 pre-authorize this for the journal and watchlist output specifically. This does **not** cover a trade that actually executed after user confirmation — that journal entry follows `propose-trade`'s own (non-auto-merge) rule, since it documents a real trade, not just a report.
+Commit the journal entry (and any watchlist add/remove, and any new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrails 6 and 7 pre-authorize this for the journal and watchlist output specifically. This does **not** cover a trade that actually executed — that journal entry follows `propose-trade`'s own (non-auto-merge) rule, since it documents a real trade, not just a report.
 
 ## Refresh the dashboard
 
