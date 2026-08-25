@@ -62,7 +62,7 @@ Always finish with the `journal-entry` skill:
 
 ## Commit, push, and merge
 
-Commit the journal entry (and any watchlist add/remove, and any new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrails 6 and 7 pre-authorize this for the journal and watchlist output specifically. This does **not** cover a trade that actually executed — that journal entry follows `propose-trade`'s own (non-auto-merge) rule, since it documents a real trade, not just a report.
+Commit the journal entry (and any watchlist add/remove, and any new/updated saved scan reference), push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrails 6 and 7 pre-authorize this for the journal and watchlist output specifically. This also covers a trade that actually executed — `propose-trade` auto-merges its own journal entry in the same turn, per `CLAUDE.md` guardrail 7.
 
 ## Refresh the dashboard
 

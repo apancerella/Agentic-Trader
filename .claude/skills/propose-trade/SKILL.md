@@ -65,6 +65,6 @@ Use the `journal-entry` skill:
 - **When a trade is executed:** Summary, Findings (signal that supports it, including the chase/extension read), Proposals (the full sized trade plus the actual fill — price, size, order id), Follow-ups if relevant. There's normally no "User decisions" section, since there's no separate decision to record — the fill itself is the outcome.
 - **When a cap blocks a trade** (steps 3–4): still journal it — Summary + Findings (what was considered) + Follow-ups (revisit once the cap resets), so the block is visible in the record even though nothing was traded.
 
-## Commit and push — but don't auto-merge
+## Commit, push, and merge
 
-Commit the journal entry and push it, same as any other change in this repo. Even though executing the trade itself doesn't require a separate confirmation, landing its record on `main` still does: `CLAUDE.md` guardrails 6 and 7 don't cover this skill's output. Open a PR if the repo's workflow calls for one, then wait for the user's explicit "merge it" — that's the point where the user gives the trade record a deliberate look, just after the fact instead of before.
+Commit the journal entry, push, and merge it to `main` in the same turn — don't leave it sitting on a branch waiting for a "please merge." `CLAUDE.md` guardrail 7 pre-authorizes this for this skill's output specifically: since executing the trade itself doesn't require a separate confirmation, there's no reason to gate the record behind a second approval either.
