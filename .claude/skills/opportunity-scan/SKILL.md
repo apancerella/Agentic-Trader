@@ -1,6 +1,6 @@
 ---
 name: opportunity-scan
-description: Runs the opportunity scan for the Agentic-Trader repo (every 2 hours, 9:30am-3:30pm ET on weekdays) — checks the current watchlist plus a reactive breakout screen and two leading-indicator screens (unusual options activity, stealth volume accumulation) for assets showing real, current or emerging upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the "Opportunity Scan" Routine fires. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may trigger propose-trade (after cross-checking earnings-watch and weekly-scan findings), which sizes and places the order directly — no separate user confirmation, per CLAUDE.md guardrail 1. This is the operationalized version of routines/opportunity-scan.md.
+description: Runs the opportunity scan for the Agentic-Trader repo (every 2 hours, 9:30am-3:30pm ET on weekdays) — checks the current watchlist plus a reactive breakout screen and two leading-indicator screens (unusual options activity, stealth volume accumulation) for assets showing real, current or emerging upside potential, reports directly to the user, and can act on what it finds. Use this when the user asks "what's looking good right now," "any new opportunities," "upside scan," or when the "Opportunity Scan" Routine fires. Unlike the other read-only routines, this one may add or remove watchlist symbols on its own conviction and may trigger propose-trade (after cross-checking earnings-watch and weekly-scan findings), which sizes and places the order directly — no separate user confirmation, per CLAUDE.md guardrail 1. It also runs a four-part exit-discipline pass on every open position each cycle — staged stop ratchet, partial scale-out, momentum-exhaustion exit, and thesis-decay review (CLAUDE.md guardrail 9) — which can likewise trigger propose-trade for a trim or exit without separate confirmation. This is the operationalized version of routines/opportunity-scan.md.
 ---
 
 # Opportunity Scan
@@ -42,13 +42,21 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
    - Only once both checks come back clean, invoke the `propose-trade` skill for that symbol. It runs its own guardrail checks (sizing, position cap, weekly trade cap) and, once they pass, places the order directly — no separate confirmation step.
    - This step is genuinely optional. A run with nothing that clears both cross-checks should say so plainly rather than stretch a marginal setup into a trade. A bare step-2 leading signal (no corroboration) shouldn't reach this step at all — it isn't a trade candidate on its own.
 
-7. **Report directly to the user** — symbol, the specific signal (reactive or leading — say which), current price/level, one line on why it matters now, plus anything added to or removed from the watchlist this run, plus whether a trade was executed (and why, if not).
+7. **Exit-discipline pass on open positions.** For every open position (`get_equity_positions`), per `CLAUDE.md` guardrail 9, always in this order:
+   - **Stop ratchet.** Compute % gain since entry off average cost; if a new tier (+10/+20/+30/+40%) has been crossed since the last check, advance the stop to the corresponding level and journal the change — mechanical, no trade, just a level update.
+   - **Partial scale-out.** Check whether the +25% or +50% tier has newly been crossed and hasn't already fired for this position (check recent journal entries for that symbol before re-firing); if so, invoke `propose-trade` for the partial sale.
+   - **Momentum-exhaustion exit.** For any position up more than 15%, pull RSI, the 9-day EMA vs. 50-day SMA, and MACD; only act if at least two of the three corroborating signals in guardrail 9(c) are present — a single signal is a watch note, not a trigger. When corroborated, invoke `propose-trade` for a trim or full exit and reason through the specific signals in the journal, not just a mechanical count.
+   - **Thesis-decay review.** On the weekly cadence in guardrail 9(d) (first run on/after Monday, or 7+ days since this position's last review), re-underwrite the position from scratch — does the original catalyst still hold, has it decayed with no fresh news and a flat-to-down price — and act via `propose-trade` if it no longer does. Journal the conclusion either way, including "still holds."
+   - Applies only to the account's current open positions, never to watchlist-only symbols — the entry-side chase/extension checks already cover those.
+
+8. **Report directly to the user** — symbol, the specific signal (reactive or leading — say which), current price/level, one line on why it matters now, plus anything added to or removed from the watchlist this run, plus whether a trade was executed (and why, if not), plus any exit-discipline action taken this run (stop advanced, partial scale-out, momentum-exhaustion exit, or thesis-decay conclusion).
 
 ## Guardrails
 
 - Never calls `place_equity_order`/`place_option_order` directly itself — trade execution flows only through `propose-trade`, which places the order once its own guardrail checks pass. No separate confirmation step, per `CLAUDE.md` guardrail 1.
 - Watchlist adds/removes are self-authorized (`CLAUDE.md` guardrail 8) but must be journaled with reasoning and mirrored to the Robinhood "Agentic Watchlist" — same mechanics as `watchlist-add`/`watchlist-remove`.
-- Never trigger a trade without first checking `earnings-watch` and `weekly-scan` findings for that symbol (step 6).
+- Never trigger an entry trade without first checking `earnings-watch` and `weekly-scan` findings for that symbol (step 6).
+- Exit-discipline mechanics (step 7) follow `CLAUDE.md` guardrail 9 and apply only to open positions. The stop ratchet and partial scale-out are mechanical and always apply once their tier is crossed; the momentum-exhaustion exit and thesis-decay review are judgment calls that still execute without separate confirmation once their stated bar is met, but the reasoning behind each must be spelled out in the journal, not just a checkbox.
 - `propose-trade`'s own guardrails (20% max position size, 7 max concurrent positions, no fixed cash reserve, -8% stop-loss, 7 max new trades/week) apply once invoked — this skill doesn't re-implement them, just triggers the check.
 
 ## Journal
@@ -56,7 +64,7 @@ Full spec: `routines/opportunity-scan.md`. If this skill and that doc ever disag
 Always finish with the `journal-entry` skill:
 - **Summary:** "Opportunity scan, <morning/midday/afternoon>."
 - **Findings:** what was checked (watchlist + reactive scan + the two leading-signal scans) and what stood out, with the specific signal for each (including trend/SMA context and nearest pivot level where checked, and — for a leading signal — the options call/put skew or relative-volume read that triggered it) — or that nothing new stood out. Note how many hits were skipped as junk (empty market_cap) across all three scans, and label any leading-signal finding as such so it's not confused with a confirmed move.
-- **Proposals:** any watchlist add/remove made this run (with reasoning), and the trade if one was executed via `propose-trade` (with the earnings-watch/weekly-scan cross-check noted, and the fill) — omit if neither happened.
+- **Proposals:** any watchlist add/remove made this run (with reasoning), the trade if one was executed via `propose-trade` (with the earnings-watch/weekly-scan cross-check noted, and the fill), and any exit-discipline action from step 7 (stop-ratchet advance, partial scale-out, momentum-exhaustion exit with the specific corroborating signals, or thesis-decay conclusion with the reasoning) — omit whichever didn't happen.
 - **Follow-ups:** anything worth a closer look next run, if relevant.
 - If step 0 found the market closed, a one-line entry noting that is enough — skip the rest of the template.
 
